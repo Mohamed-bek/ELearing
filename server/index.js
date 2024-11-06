@@ -9,9 +9,11 @@ import VideoRouter from "./routes/VideoRouter.js";
 import ConferenceRouter from "./routes/ConferenceRouter.js";
 import BlogRouter from "./routes/BlogRouter.js";
 import CategoryRouter from "./routes/CategoryRouter.js";
-import PriceRouter from "./routes/PriceRouter.js";
+import MemeberShipRouter from "./routes/MemberShipRouter.js";
 import ProgressRouter from "./routes/ProgressRouter.js";
 import QuizRouter from "./routes/QuizRouter.js";
+import AdminRouter from "./routes/AdminRouter.js";
+import UserMembershipRouter from "./routes/UserMembershipRouter.js";
 import AWS from "aws-sdk";
 
 dotenv.config();
@@ -46,10 +48,12 @@ app.use(CourseRouter);
 app.use(VideoRouter);
 app.use(ConferenceRouter);
 app.use(BlogRouter);
-app.use(PriceRouter);
+app.use(MemeberShipRouter);
 app.use(CategoryRouter);
 app.use(ProgressRouter);
 app.use(QuizRouter);
+app.use(UserMembershipRouter);
+app.use("/admin", AdminRouter);
 const MONGO_URL =
   process.env.MONGO_URL || "mongodb://localhost:27017/mydatabase";
 

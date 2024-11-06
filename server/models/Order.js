@@ -10,7 +10,6 @@ const orderSchema = new Schema(
       enum: ["pending", "completed"],
       default: "pending",
     },
-    price: { type: Number, required: true },
   },
   { timestamps: true }
 );
