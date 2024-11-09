@@ -31,3 +31,17 @@ export const authorizeRoles = (allowedRoles) => {
     next();
   };
 };
+
+export const getIdUser = (req, res, next) => {
+  try {
+    const { accessToken } = req.cookies;
+
+    if (!accessToken) return next();
+
+    const user = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    req.userId = user.id;
+    next();
+  } catch (error) {
+    next();
+  }
+};

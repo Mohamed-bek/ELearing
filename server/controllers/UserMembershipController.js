@@ -1,6 +1,37 @@
 import UserMembership from "../models/UserMembership.js";
 import cron from "node-cron";
-import Payment from "./models/Payment.js";
+import Payment from "../models/Payment.js";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// export const createSubscription = async (req, res) => {
+//   try {
+//     const { customerId, paymentMethodId, price } = req.body;
+
+//     // Attach payment method to customer
+//     await stripe.paymentMethods.attach(paymentMethodId, {
+//       customer: customerId,
+//     });
+
+//     // Set the default payment method on the customer
+//     await stripe.customers.update(customerId, {
+//       invoice_settings: { default_payment_method: paymentMethodId },
+//     });
+
+//     // Create the subscription
+//     const subscription = await stripe.subscriptions.create({
+//       customer: customerId,
+//       items: [{ price }], // Replace with your actual price ID
+//       expand: ["latest_invoice.payment_intent"],
+//     });
+
+//     res.status(200).json({ subscription });
+//   } catch (error) {
+//     console.error("Error creating subscription:", error);
+//     res.status(400).json({ error: { message: error.message } });
+//   }
+// };
 
 export const createUserMembership = async (req, res) => {
   try {

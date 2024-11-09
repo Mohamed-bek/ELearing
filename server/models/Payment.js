@@ -7,7 +7,7 @@ const paymentSchema = new Schema(
     stripePaymentId: { type: String, required: true }, // Store Stripe payment reference
     status: {
       type: String,
-      enum: ["succeeded", "pending", "failed"],
+      enum: ["succeeded", "pending", "failed", "chargeback"],
       required: true,
     },
   },

@@ -2,12 +2,13 @@ import Order from "../models/Order.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const { userId, courseId, price } = req.body;
-
+    const { course } = req.body;
+    const userId = req.user.id;
+    if (!userId)
+      return res.status(401).json({ error: "You have to create an account" });
     const newOrder = new Order({
       user: userId,
-      course: courseId,
-      price,
+      course,
     });
 
     await newOrder.save();

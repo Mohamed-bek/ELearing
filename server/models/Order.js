@@ -7,7 +7,7 @@ const orderSchema = new Schema(
     payment: { type: Schema.Types.ObjectId, ref: "Payment" }, // Optional field: Only after payment is created
     paymentStatus: {
       type: String,
-      enum: ["pending", "completed"],
+      enum: ["pending", "completed", "cancelled"],
       default: "pending",
     },
   },

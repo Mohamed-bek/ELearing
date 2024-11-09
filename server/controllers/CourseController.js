@@ -1,5 +1,6 @@
 import Course from "../models/Course.js";
 import { s3 } from "../index.js";
+import UserMembership from "../models/UserMembership.js";
 
 export const CreateCourse = async (req, res) => {
   try {
@@ -70,7 +71,7 @@ export const addVideosToCourse = async (req, res) => {
 export const GetCoursesByFilter = async (req, res) => {
   try {
     const { title, categorys, minPrice, maxPrice } = req.query;
-
+    const userId = req.userId;
     const filter = {};
 
     if (title) {
@@ -94,7 +95,30 @@ export const GetCoursesByFilter = async (req, res) => {
       }
     }
 
-    const courses = await Course.find(filter);
+    let discount = 0;
+
+    if (userId) {
+      const userMembership = await UserMembership.findOne({
+        userId,
+        status: "active",
+      }).populate({
+        path: "membershipId",
+        select: "discount",
+      });
+
+      if (userMembership) {
+        discount = userMembership.membershipId.discount;
+      }
+    }
+
+    let courses = await Course.find(filter);
+
+    if (discount > 0) {
+      courses = courses.map((course) => ({
+        ...course.toObject(),
+        price: course.price - (course.price * discount) / 100,
+      }));
+    }
 
     res.status(200).json(courses);
   } catch (error) {
@@ -106,10 +130,32 @@ export const GetCoursesByFilter = async (req, res) => {
 export const GetCourseById = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.userId;
+
+    let discount = 0;
+
+    if (userId) {
+      const userMembership = await UserMembership.findOne({
+        userId,
+        status: "active",
+      }).populate({
+        path: "membershipId",
+        select: "discount",
+      });
+
+      if (userMembership) {
+        discount = userMembership.membershipId.discount;
+      }
+    }
+
     const course = await Course.findById(id).populate({
       path: "videos.video",
       select: "title thumbnail",
     });
+
+    if (discount > 0) {
+      course.price = course.price - (course.price * discount) / 100;
+    }
     if (!course) throw new Error("Course not exist");
     res.status(200).json({ course });
   } catch (error) {

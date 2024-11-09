@@ -2,16 +2,34 @@ import Membership from "../models/MemeberShipModel.js";
 
 export const createMembership = async (req, res) => {
   try {
-    const { name, priceMonthly, priceYearly, description, benefits } = req.body;
-
-    const newMembership = new Membership({
+    const {
       name,
-      priceYearly,
-      priceMonthly,
+      price,
+      duration,
       description,
       benefits,
+      discount,
+      paymentId,
+      link,
+    } = req.body;
+    if (discount && (0 > discount || discount > 100)) {
+      res.status(500).json({
+        message:
+          " The Discount Should Be In The Range Of 0% - 100%  and  your discount is : " +
+          discount +
+          "%",
+      });
+    }
+    const newMembership = new Membership({
+      paymentId,
+      name,
+      link,
+      duration,
+      price,
+      description,
+      benefits,
+      discount,
     });
-
     await newMembership.save();
     res.status(201).json({ message: true, data: newMembership });
   } catch (error) {

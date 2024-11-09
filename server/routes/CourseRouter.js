@@ -7,7 +7,11 @@ import {
 } from "../controllers/CourseController.js";
 import { upload } from "../middleware/multerConfig.js";
 
-import { authenticateToken, authorizeRoles } from "../middleware/Auth.js";
+import {
+  authenticateToken,
+  authorizeRoles,
+  getIdUser,
+} from "../middleware/Auth.js";
 
 const CourseRouter = Router();
 
@@ -19,7 +23,7 @@ CourseRouter.post(
   CreateCourse
 );
 CourseRouter.put("/course/add_video/:id", addVideosToCourse);
-CourseRouter.get("/courses/", GetCoursesByFilter);
-CourseRouter.get("/course/:id", GetCourseById);
+CourseRouter.get("/courses/", getIdUser, GetCoursesByFilter);
+CourseRouter.get("/course/:id", getIdUser, GetCourseById);
 
 export default CourseRouter;

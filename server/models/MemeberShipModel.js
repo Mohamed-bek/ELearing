@@ -2,16 +2,24 @@ import { Schema, model } from "mongoose";
 
 const membershipSchema = new Schema(
   {
+    paymentId: {
+      type: String,
+      required: true,
+    },
+    paymentId: { type: String, required: true, unique: true },
+    link: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
-      enum: ["Basic", "Premium", "Pro"],
+      enum: ["Gold", "Premium", "Pro"],
     },
-    priceMonthly: {
-      type: Number,
-      required: true,
+    duration: {
+      type: String,
     },
-    priceYearly: {
+    price: {
       type: Number,
       required: true,
     },
@@ -23,15 +31,15 @@ const membershipSchema = new Schema(
       type: [String],
       default: [],
     },
+    discount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
-// Middleware to update the `updatedAt` field before saving
-// membershipSchema.pre("save", function (next) {
-//   this.updatedAt = Date.now();
-//   next();
-// });
+membershipSchema.index({ paymentId: 1 });
 
 const Membership = model("Membership", membershipSchema);
 

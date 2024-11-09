@@ -25,9 +25,8 @@ const userMembershipSchema = new Schema(
       enum: ["active", "expired", "cancelled"],
       default: "active",
     },
-    autoRenew: {
-      type: Boolean,
-      default: false,
+    subscriptionId: {
+      type: String,
     },
     discountCode: {
       type: String, // Any discount or promo code applied
